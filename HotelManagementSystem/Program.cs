@@ -9,8 +9,8 @@
             int rommNum = 0;
             string roomType = "";
             double nightlyRate = 0;
-            string checkIndate = "";
-            string checkOutdate = "";
+            DateTime checkIndate;
+            DateTime checkOutdate;
             int numOfNights = 0;
             string roomNotes = "";
             double discountPersntage = 0;
@@ -21,7 +21,8 @@
 
             int choice = 0;
 
-            while (true) {
+            while (true)
+            {
 
                 Console.WriteLine("0. Register New Guest");
                 Console.WriteLine("1. View Guest Information");
@@ -40,7 +41,7 @@
                 switch (choice)
                 {
                     // register guest = Add
-                    case 1:
+                    case 0:
 
                         // Trim = remove the space between 
                         Console.Write("Enter guest name: ");
@@ -66,6 +67,63 @@
                         isGuestRegister = true;
                         Console.WriteLine("Guest Registered Successfully!");
                         break;
+
+
+                    // View Guest Information
+                    case 1:
+                        if (isGuestRegister)
+                        {
+                          
+                            Console.WriteLine("Guset Name: " + guestName.ToUpper());
+                            Console.WriteLine("Guest Phone: " + gustPhone);
+                            Console.WriteLine("Room Type: " + roomType);
+                            Console.WriteLine("Nightly rate: " + Math.Round(nightlyRate).ToString()); // it is not work!!!
+                            Console.WriteLine("Room number: " + nightlyRate.ToString());
+                            
+                        }
+
+                        else
+                        {
+                            Console.WriteLine("No guset registerd..");
+                        }
+                        
+                        break;
+
+                    // Check-In Guest
+                    case 2:
+                        if(isGuestRegister) {
+                        Console.Write("Enter number of nights: ");
+                        numOfNights = Convert.ToInt32(Console.ReadLine());
+
+                        // check-in date from system clock.
+                        checkIndate = DateTime.Now;
+
+                        // date and time today 
+                        checkIndate = DateTime.Today;
+
+                        //Compute and store check out date based on number of nights
+                          checkOutdate= checkIndate.AddDays(numOfNights);
+                        string formattedDate = checkOutdate.ToString("yyyy-MM-dd HH:mm:ss");
+
+                            isCheckIn = true;
+
+                            Console.WriteLine("Guest check in successfuly..");
+                            Console.WriteLine("Check-In Date: " + checkIndate);
+                            Console.WriteLine("Check-Out Date: " + checkOutdate);
+                        }
+                        else
+                        {
+                            Console.WriteLine("No guest registered.");
+                        }
+
+                        break;
+
+
+
+
+
+
+
                 }
 
             }
