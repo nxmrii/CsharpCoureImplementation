@@ -134,7 +134,8 @@ namespace ClinicSystem
                             else
                             {
                                 Console.WriteLine("Invalid.");
-                            }
+                            } 
+
                         break;
 
 
