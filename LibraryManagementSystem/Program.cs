@@ -57,9 +57,9 @@
         static void displayMemberProfile()
         {
             Console.WriteLine(" Member Profile ");
-            Console.WriteLine("Member Name: " + MemberName);
+            Console.WriteLine("Member Name: " + MemberName.PadLeft(10));
             Console.WriteLine("Member Email: " + MemberEmail);
-            Console.WriteLine("Member id: " + MemberId);
+            Console.WriteLine("Member id: " + MemberId.ToString());
             Console.WriteLine("Member Expiry Date: " + MemberShipExirDate);
             Console.WriteLine("Member tire: " + MemberTire);
         } 
@@ -129,6 +129,7 @@
 
                     
                     case 1:
+                        displayMemberProfile();
                         break;
 
                    
@@ -179,6 +180,10 @@
                         Console.WriteLine("Invalid choice!");
                         break;
                 }
+
+                Console.WriteLine("press any key to continue..");
+                Console.ReadKey();
+                Console.Clear();
             }
         }
     }
