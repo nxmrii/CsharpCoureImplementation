@@ -1,4 +1,6 @@
-﻿namespace LibraryManagementSystem
+﻿using static System.Net.WebRequestMethods;
+
+namespace LibraryManagementSystem
 {
     internal class Program
     {
@@ -62,14 +64,74 @@
             Console.WriteLine("Member id: " + MemberId.ToString());
             Console.WriteLine("Member Expiry Date: " + MemberShipExirDate);
             Console.WriteLine("Member tire: " + MemberTire);
-        } 
+        }
 
 
+        // case 2 -- search book by title(return value function)
+        static bool SearchBook(string key)
+        {
+            //convert string to lowercase
+            string title = BookTitle.ToLower();
+            key = key.ToLower();
+
+            // check if keyword insid title 
+            if (title.Contains(key))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        // case 3 -- Borrow book
+        static void borrowBook(ref int copies)
+        {
+            copies = Math.Max(0, copies);
+
+            Console.WriteLine("book borrowed successfuly.");
+            Console.WriteLine("Available copies: " + copies);
+
+            if (!BookIsRegister)
+            {
+                Console.WriteLine("No book registered.");
+               
+            }
+
+            borrowBook(ref numOfCopies);
+        }
 
 
+        // case 8 -- register book (optinal parameter , the default is general)
+         static void ReggisterBook(string genre = "General") 
+        {
+            Console.WriteLine("Enter book title: ");
+            BookTitle = Console.ReadLine().Trim();
+
+            Console.WriteLine("Enter author name: ");
+            BookAuthor = Console.ReadLine();
+
+            Console.WriteLine("Enter the number of copies: ");
+            // parse => because readline always read string
+            numOfCopies = int.Parse(Console.ReadLine());
+
+            Console.WriteLine("Enter genre: ");
+            string inputgenre = Console.ReadLine();
+
+            BookIsRegister = true;
 
 
+            Console.WriteLine("Book Registered Successfully.");
+        }
 
+        // case 10 -- Display book details
+        static void displaybook(string title, string author, int copies, string genre)
+        {
+            Console.WriteLine(" Book details ");
+            Console.WriteLine("Title: " + title);
+            Console.WriteLine("Author: " +  author);
+            Console.WriteLine("Copies: " +  copies);
+            Console.WriteLine("Genre: " +  genre);
+        }
 
 
 
@@ -110,14 +172,16 @@
 
         static void Main(string[] args)
         {
-            
+            //PrintMenu();
 
             bool exit = false;
             while (exit == false)
             {
+                PrintMenu();
+
                 Console.WriteLine("select an option from the menu:");
                 int option = int.Parse(Console.ReadLine());
-                PrintMenu();
+                
 
                 switch (option)
                 {
@@ -134,10 +198,27 @@
 
                    
                     case 2:
+                       if (BookIsRegister == false)
+                        {
+                            Console.WriteLine("no book registerd yet.");
+                            break;
+                        }
+                        Console.WriteLine("Enter keyword to search: ");
+                        string key = Console.ReadLine();
+
+                        if (SearchBook(key))
+                        {
+                            Console.WriteLine("Book found: " + BookTitle);
+                        }
+                        else
+                        {
+                            Console.WriteLine("no book found..");
+                        }
                         break;
 
                     
                     case 3:
+                        borrowBook(ref numOfCopies);
                         break;
 
                     case 4:
@@ -153,12 +234,17 @@
                         break;
 
                     case 8:
+                        ReggisterBook();
                         break;
 
                     case 9:
                         break;
 
                     case 10:
+                        displaybook(title: BookTitle,
+                            author: BookAuthor,
+                            copies: numOfCopies,
+                            genre: BookGenre);
                         break;
 
                     case 11:
