@@ -100,9 +100,23 @@ namespace LibraryManagementSystem
             borrowBook(ref numOfCopies);
         }
 
+        // case 4 -- Return Book
+        static void returnBook(ref int Copies)
+        {  // ref int copies = receive the num of copies and edit directly
+            if (!BookIsRegister)
+            {
+                Console.WriteLine("no book registerd");
+                return;
+            }
 
-        // case 8 -- register book (optinal parameter , the default is general)
-         static void ReggisterBook(string genre = "General") 
+            Copies = Copies + 1;
+            Console.WriteLine("Book return successfuly..");
+            Console.WriteLine("Avilable copies: " + Copies);
+        }
+
+
+            // case 8 -- register book (optinal parameter , the default is general)
+            static void RegisterBook(string genre = "General") 
         {
             Console.WriteLine("Enter book title: ");
             BookTitle = Console.ReadLine().Trim();
@@ -186,17 +200,17 @@ namespace LibraryManagementSystem
                 switch (option)
                 {
 
-                    
+                    //done
                     case 0:
                         RegisterMember();
                         break;
 
-                    
+                    //done
                     case 1:
                         displayMemberProfile();
                         break;
 
-                   
+                    //done
                     case 2:
                        if (BookIsRegister == false)
                         {
@@ -216,12 +230,15 @@ namespace LibraryManagementSystem
                         }
                         break;
 
-                    
+
+                    //done
                     case 3:
                         borrowBook(ref numOfCopies);
                         break;
 
+                    //done
                     case 4:
+                        returnBook(ref numOfCopies);
                         break;
 
                     case 5:
@@ -233,13 +250,15 @@ namespace LibraryManagementSystem
                     case 7:
                         break;
 
+                    //done
                     case 8:
-                        ReggisterBook();
+                        RegisterBook();
                         break;
 
                     case 9:
                         break;
 
+                   //done
                     case 10:
                         displaybook(title: BookTitle,
                             author: BookAuthor,
