@@ -47,7 +47,7 @@ namespace LibraryManagementSystem
             MemberTire = Console.ReadLine();
 
             MemberShipExirDate = DateTime.Now.ToString("yyy-MM-dd");
-            string nameOfMember = MemberName.Substring(0,5);
+            string nameOfMember = MemberName;
 
             MemberIsRegister = true;
 
@@ -97,7 +97,7 @@ namespace LibraryManagementSystem
                
             }
 
-            borrowBook(ref numOfCopies);
+            
         }
 
         // case 4 -- Return Book
@@ -115,8 +115,15 @@ namespace LibraryManagementSystem
         }
 
 
-            // case 8 -- register book (optinal parameter , the default is general)
-            static void RegisterBook(string genre = "General") 
+        // case 5 -- Calculate Late Fine 
+        static double calculateFine(int lateDays)
+        {
+            return Math.Sqrt(lateDays) * 0.5;
+        }
+
+
+        // case 8 -- register book (optinal parameter , the default is general)
+        static void RegisterBook(string genre = "General") 
         {
             Console.WriteLine("Enter book title: ");
             BookTitle = Console.ReadLine().Trim();
@@ -242,6 +249,11 @@ namespace LibraryManagementSystem
                         break;
 
                     case 5:
+                        Console.WriteLine("enter overdue days: ");
+                        int days = int.Parse(Console.ReadLine());
+
+                        double fine = calculateFine(days);
+                        Console.WriteLine("late Fine = " + fine);
                         break;
 
                     case 6:
