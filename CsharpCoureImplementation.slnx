@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="Arrays/Arrays.csproj" Id="875130a1-f56f-40f4-aa03-f516e0a2f2db" />
   <Project Path="ClinicSystem/ClinicSystem.csproj" />
   <Project Path="HotelManagementSystem/HotelManagementSystem.csproj" Id="d1f41b22-88af-4e53-a4ae-ea97a1bd7257" />
   <Project Path="LibraryManagementSystem/LibraryManagementSystem.csproj" Id="e8172a80-f82d-4e04-90ea-3937ac24126e" />

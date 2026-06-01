@@ -122,6 +122,13 @@ namespace LibraryManagementSystem
         }
 
 
+        // case 6 -- Apply member discount
+        //static double applyDiscount(double amount)
+       /// {
+        //    return amount * 3;
+
+       // }
+
         // case 8 -- register book (optinal parameter , the default is general)
         static void RegisterBook(string genre = "General") 
         {
