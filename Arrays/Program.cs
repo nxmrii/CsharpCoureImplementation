@@ -85,6 +85,22 @@
         }
 
 
+        //case 5 -- Classroom Grade Report 
+        static int[] grades = { 60, 70, 50, 30, 20, 98, 83, 77, 99, 100 };
+
+        static void studenGrade()
+        {
+            Array.Sort(grades);
+            Array.Reverse(grades);
+
+            for (int i = 0; i < grades.Length; i++) {
+
+                Console.WriteLine("Ranke " + (i + 1) + ": " + grades[i]);
+            }
+           
+        }
+
+
 
 
 
@@ -135,6 +151,7 @@
                         break;
 
                     case 5:
+                        studenGrade();
                         break;
 
                     case 6:
