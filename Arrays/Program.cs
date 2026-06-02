@@ -39,29 +39,28 @@
 
         // case 3 --  Product Price Finder 
         static Double[] prices = { 50, 60.5, 30, 40.5, 70 };
-        static double prodictPrice(string key) { 
+        static void prodictPrice() { 
         
             for(int i = 0; i < prices.Length; i++)
             {
                 Console.WriteLine("Product " + (i+1) + ":" + prices[i]);
             }
-
-            Array.IndexOf(prices);
-
-                key = key;
-
-                // check if keyword insid title 
-                if (prices.Contains(key))
-                {
-                    return true;
-                }
-
-                return false;
             
+            double target = 60.5;  // hardcoded target
+            int index = Array.IndexOf(prices,target);  // indexOf: true= 1, false=-1
+
+            // check in wich index 
+            if (index != -1)
+            {
+                Console.WriteLine("Price " + target + " found in index " + index);
+            }
+            else {
+                Console.WriteLine("Price " + target+ " was not found");
+            }
         }
 
 
-
+        // case 4 -- Race Finish Times
 
 
 
