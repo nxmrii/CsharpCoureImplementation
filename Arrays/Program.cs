@@ -61,7 +61,28 @@
 
 
         // case 4 -- Race Finish Times
+        static int[] finishTimes = {10,15,11,13,16,14,12,17};
+        //print orginal array
+        static void raceFinishTime()
+        {
+            foreach (int i in finishTimes) {
 
+                Console.WriteLine(i);
+            }
+
+            // sorted
+
+            //int sortetimes = Array.Sort(finishTimes); // first i do this mistake and i understand that the array.sort "void" not return any value
+            Array.Sort(finishTimes);
+            Console.WriteLine("sorted times: ");
+            foreach (int time in finishTimes)
+            {
+
+                Console.WriteLine(time);
+            }
+
+            Console.WriteLine("number of players: " + finishTimes.Length);
+        }
 
 
 
@@ -109,6 +130,8 @@
                         break;
 
                     case 4:
+                        raceFinishTime();
+
                         break;
 
                     case 5:
