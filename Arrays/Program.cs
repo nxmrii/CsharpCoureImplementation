@@ -153,10 +153,12 @@
                     Console.WriteLine("there is no book title with zero copies");
                 }
             }
-
-
             }
-        
+
+
+
+        //case 8 -- Sales Performance Analyzer    [Hard] , i will back after i finish learnd the list
+
 
 
         static void PrintMenu()

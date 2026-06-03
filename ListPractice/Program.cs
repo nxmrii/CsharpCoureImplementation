@@ -11,7 +11,6 @@
             "salad",
             "rice"
         };
-
         static void RoomService()
         {
             // Adding multiple elements at once 
@@ -59,13 +58,68 @@
         }
 
         //case 2 -- Guest Check-In Queue 
+        static List<string> checkInQueue = new List<string>()
+        {
+            "noor",
+            "reem",
+            "deemah",
+            "Arwa",
+            "Habiba"
+        };
 
+        static void checkGuest()
+        {
+            Console.WriteLine("Guest Check in Queue: ");
+            for (int i = 0; i < checkInQueue.Count; i++)
+            {
+                Console.WriteLine(checkInQueue[i]);
+            }
+
+            Console.WriteLine("Guest Check in Queue after removing the first guest: ");
+            checkInQueue.RemoveAt(0);
+            for (int i = 0; i < checkInQueue.Count; i++)
+            {
+                Console.WriteLine(checkInQueue[i]);
+            }
+
+            Console.WriteLine("Guest Check in Queue after removing the second guest: ");
+            checkInQueue.RemoveAt(0);
+            for (int i = 0; i < checkInQueue.Count; i++)
+            {
+                Console.WriteLine(checkInQueue[i]);
+            }
+
+            Console.WriteLine("Add 3 new arriving Guest");
+            checkInQueue.AddRange("Asma", "Sara", "tasnim");
+            for(int i = 0; i < checkInQueue.Count; i++)
+            {
+                Console.WriteLine(checkInQueue[i]);
+            }
+
+            Console.WriteLine("check if Arwa is still waiting or not!");
+            if (checkInQueue.Contains("Arwa"))
+            {
+                Console.WriteLine("Arwa still in waiting List");
+            }
+            else
+            {
+                Console.WriteLine("no one!");
+            }
+
+           Console.WriteLine("There is: " +  checkInQueue.Count + " still in the waiting list");
+        }
 
 
 
         //case 3 -- Housekeeping Floor Assignment 
-
-
+        static List<int> assignedRooms = new List<int>() {100,102,204,205,300,306};
+        static void HousFloor()
+        {
+            for (int i = 0; i < assignedRooms.Count; i++)
+            {
+                Console.WriteLine($"{assignedRooms[i]}");
+            }
+        }
 
         //case 4 -- Hotel Booking Conflict Resolver
 
@@ -103,9 +157,11 @@
                         break;
 
                     case 2:
+                        checkGuest();
                         break;
 
                     case 3:
+                        HousFloor();
                         break;
 
                     case 4:
