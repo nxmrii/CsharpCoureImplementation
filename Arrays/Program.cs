@@ -87,7 +87,6 @@
 
         //case 5 -- Classroom Grade Report 
         static int[] grades = { 60, 70, 50, 30, 20, 98, 83, 77, 99, 100 };
-
         static void studenGrade()
         {
             Array.Sort(grades);
@@ -99,6 +98,26 @@
             }
            
         }
+
+
+        //case 6 -- Warehouse Inventory Check
+        static int[] quantities = { 5, 6, 7, 2, 4, 10, 8, 9 };
+
+        static void totQuantities() {
+
+            //total
+            int total = 0;
+            for (int i = 0; i < quantities.Length; i++) {
+
+                total += quantities[i];
+            }
+            Console.WriteLine("total quantities: " +  total);
+
+            //avrage
+            double avrage = total / quantities.Length;
+            Console.WriteLine("Avrage quantity: " + avrage);
+        }
+
 
 
 
@@ -155,6 +174,7 @@
                         break;
 
                     case 6:
+                        totQuantities();
                         break;
 
                     case 7:
