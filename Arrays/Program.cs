@@ -102,7 +102,6 @@
 
         //case 6 -- Warehouse Inventory Check
         static int[] quantities = { 5, 6, 7, 2, 4, 10, 8, 9 };
-
         static void totQuantities() {
 
             //total
@@ -119,8 +118,45 @@
         }
 
 
+        //case 7 -- Library Book Shelf Scanner
+        static int[] copies = {7,9,0,3,4,5,10,16,25};
+        static void totCopies() {
+
+            foreach (int i in copies)
+            { 
+            Console.WriteLine(i);
+            }
+
+            Array.Sort(copies);
+            Console.WriteLine("sorted copies: ");
+            foreach (int cop in copies)
+            {
+                Console.WriteLine(cop);
+            }
+            Console.WriteLine("the most title copies: " + copies[copies.Length - 1]);
 
 
+            //q:Check whether any entry equals zero and report accordingly. i try to solve it without using for loop
+            int founMax = Array.Find(copies, (i) => i <= 0);
+            Console.WriteLine("find zero copies without using for loop: " + founMax);
+
+            //using for loop
+            for (int i = 0; i < copies.Length; i++)
+            {
+                if (copies[i] == 0)
+                {
+                    Console.WriteLine("There is a book title with zero copies");
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("there is no book title with zero copies");
+                }
+            }
+
+
+            }
+        
 
 
         static void PrintMenu()
@@ -178,6 +214,7 @@
                         break;
 
                     case 7:
+                        totCopies();
                         break;
 
                     case 8:
