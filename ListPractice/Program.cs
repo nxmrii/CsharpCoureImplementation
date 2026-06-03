@@ -112,13 +112,49 @@
 
 
         //case 3 -- Housekeeping Floor Assignment 
-        static List<int> assignedRooms = new List<int>() {100,102,204,205,300,306};
+        static List<int> assignedRooms = new List<int>() {102,100,205,204,300,306};
         static void HousFloor()
         {
             for (int i = 0; i < assignedRooms.Count; i++)
             {
-                Console.WriteLine($"{assignedRooms[i]}");
+                Console.WriteLine(assignedRooms[i]);
             }
+
+            Console.WriteLine("Add 2 more room in the list");
+            assignedRooms.AddRange(403, 404);
+            for (int i = 0; i < assignedRooms.Count; i++)
+            {
+                Console.WriteLine((i + 1) + ". Room " + assignedRooms[i]);
+            }
+
+            Console.WriteLine("remove room 403 from the list");
+            assignedRooms.Remove(403);
+            for (int i = 0; i < assignedRooms.Count; i++)
+            {
+                Console.WriteLine(assignedRooms[i]);
+            }
+
+            Console.WriteLine("Sorted List: ");
+            assignedRooms.Sort();
+            for (int i = 0; i < assignedRooms.Count; i++)
+            {
+                Console.WriteLine(assignedRooms[i]);
+            }
+
+            Console.WriteLine("display the index number for 204 room");
+            int index = assignedRooms.IndexOf(204);
+            Console.WriteLine(index);
+
+            Console.WriteLine("put 120 in the index 2");
+             assignedRooms.Insert(2 , 120);
+            for (int i = 0; i < assignedRooms.Count; i++)
+            {
+                Console.WriteLine(assignedRooms[i]);
+            }
+
+            Console.WriteLine("Total Rooms: " + assignedRooms.Count);
+
+
         }
 
         //case 4 -- Hotel Booking Conflict Resolver
