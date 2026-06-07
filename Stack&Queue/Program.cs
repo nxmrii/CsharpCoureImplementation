@@ -4,7 +4,7 @@
     {
 
         //case 1 -- Stack -- 
-        //Browser History Tracker
+        //browser History Tracker
         public static void BrowserHistory()
         {
             //1
