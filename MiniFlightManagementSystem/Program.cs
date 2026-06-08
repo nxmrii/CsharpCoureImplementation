@@ -111,7 +111,7 @@ namespace MiniFlightManagementSystem
 
         }
 
-        // case3 --  Book a Flight Ticket
+        // case3 --  book a Flight Ticket
         static void bookFlight()
         {
             //1- Enter ticket id
@@ -212,19 +212,372 @@ namespace MiniFlightManagementSystem
         }
 
 
+        //case4 --  View Booking Details
+        static void viewBookingdetails()
+        {
+            Console.WriteLine("Enter Ticket Id: ");
+            string ticket = Console.ReadLine();
+
+            //1  Prompt for a ticket ID. with validate
+            //if empty
+                if (string.IsNullOrEmpty(ticket))
+                {
+                    Console.WriteLine("ticket id can not be empty");
+                    return;
+                }
+
+                //if not found
+                if (!ticketNumbers.Contains(ticket))
+            {
+                Console.WriteLine("Ticket ID not found");
+                return;
+            }
+
+            //find matching index
+            int index = ticketNumbers.IndexOf(ticket);
+            string passenger = passengerNames[index];
+
+            //check if ticket is cancelled
+            if (cancelledTickets.Contains(ticket))
+            {
+                Console.WriteLine("This ticket cancelled");
+                return;
+            }
+
+            //if the ticket id not match in the booking record
+            if (!bookingRecord.ContainsKey(ticket)){
+                Console.WriteLine("No booking found for this ticket");
+                return;
+            }
+
+            //get booking value
+            string booking = bookingRecord[ticket];
+
+            //split the booking value
+            string[] parts = booking.Split("|");
+            // store flight and value
+            string flightNumb = parts[0];
+            string flightDate = parts[1];
+
+            //display booking summary
+            Console.WriteLine("Booking Summary");
+            Console.WriteLine("Passanger: " + passenger);
+            Console.WriteLine("Ticket ID: " + ticket);
+            Console.WriteLine("Flight Number: " + flightNumb);
+            Console.WriteLine("Flight Date: " + flightDate);
+
+        }
+
+        //case5 --  Update a Booking
+        static void updateBooking()
+        {
+            //1
+            Console.WriteLine("Enter Ticket id: ");
+            string ticket = Console.ReadLine();
+
+            if (!ticketNumbers.Contains(ticket))
+            {
+                Console.WriteLine("Ticket ID not found.");
+                return;
+            }
+
+            if (cancelledTickets.Contains(ticket))
+            {
+                Console.WriteLine("This ticket is cancelled");
+                return;
+            }
+
+            if (!bookingRecord.ContainsKey(ticket))
+            {
+                Console.WriteLine("this ticket id not exists");
+                return;
+            }
+
+            //2
+            string booking = bookingRecord[ticket];
+            string[] details = booking.Split('|');
+            string CurrentFlight = details[0];
+            string CuurentDate = details[1];
+
+            Console.WriteLine("Current Booking Details");
+            Console.WriteLine("Ticket ID: " + ticket);
+            Console.WriteLine("Flight Number: " + CurrentFlight);
+            Console.WriteLine("Flight Date: " + CuurentDate);
+
+            //3
+            SupMenu();
+            Console.Write("Choose an option: ");
+            string option = Console.ReadLine();
 
 
+            //save old value before updating
+            string oldFlight = CurrentFlight;
+            string oldDate = CuurentDate;
+
+            string newFlight = CurrentFlight;
+            string newDate = CuurentDate;
+
+            switch (option)
+            {
+                //1.Change flight only
+                case "1":
+                    Console.WriteLine("Available Flights: ");
+                    for (int i = 0; i < flightNumbers.Length; i++)
+                    {
+                        Console.WriteLine(flightNumbers[i]);
+                    }
+
+                    Console.Write("Enter new flight: ");
+                    newFlight = Console.ReadLine().Trim();
+
+                    //check if flight is there or not
+                    if (!flightNumbers.Contains(newFlight))
+                    {
+                        Console.WriteLine("Invalid flight.");
+                        return;
+                    }
+                    newDate = CuurentDate;
+                    Console.WriteLine("Successfuly updated flight..");
+                    break;
+
+                //2.Change Date Only
+                case "2":
+
+                    Console.WriteLine("Available Dates: ");
+                    for (int i = 0; i < availableDates.Count; i++)
+                    {
+                        Console.WriteLine(availableDates[i]);
+                    }
+
+                    Console.Write("Enter new date: ");
+                    newDate = Console.ReadLine().Trim();
+
+                    //check if date is there or not
+                    if (!availableDates.Contains(newDate))
+                    {
+                        Console.WriteLine("Invalid Date.");
+                        return;
+                    }
+                    newFlight = CurrentFlight;
+                    Console.WriteLine("Successfuly updated date..");
+                    break;
+
+                //3.Change Both
+                case "3":
+                    //show available flight
+                    Console.WriteLine("Available Flights: ");
+                    for (int i = 0; i < flightNumbers.Length; i++)
+                    {
+                        Console.WriteLine(flightNumbers[i]);
+                    }
+
+                    Console.Write("Enter new flight: ");
+                    string bothFlight = Console.ReadLine().Trim();
+
+                    //check if flight is there or not
+                    if (!flightNumbers.Contains(bothFlight))
+                    {
+                        Console.WriteLine("Invalid flight.");
+                        return;
+                    }
+
+                    //show available dates
+                    Console.WriteLine("Available Dates: ");
+                    for (int i = 0; i < availableDates.Count; i++)
+                    {
+                        Console.WriteLine(availableDates[i]);
+                    }
+
+                    Console.Write("Enter new date: ");
+                    string bothDate = Console.ReadLine().Trim();
+
+                    //check if date is there or not
+                    if (!availableDates.Contains(bothDate))
+                    {
+                        Console.WriteLine("Invalid Date.");
+                        return;
+                    }
+
+                    // assign both updates
+                    newFlight = bothFlight;
+                    newDate = bothDate;
+
+                    Console.WriteLine("Successfully updated both flight and date.");
+                    break;
+
+                //0.Cancel Update
+                case "0":
+                    Console.WriteLine("Update cancelled.");
+                    break;
+            }
+
+            //FLIGHT|DATE
+            string updatedBooking = newFlight + "|" + newDate;
+            bookingRecord[ticket] = updatedBooking;
+
+            Console.WriteLine("Booking Updated Successfully");
+            Console.WriteLine("OLD BOOKING");
+            Console.WriteLine("Flight: " + oldFlight);
+            Console.WriteLine("Date  : " + oldDate);
+            
+            Console.WriteLine("NEW BOOKING");
+            Console.WriteLine("Flight: " + newFlight);
+            Console.WriteLine("Date  : " + newDate);
+        }
+
+
+        //case 6 --  Cancel a Ticket
+        static void cancelTicket()
+        {
+            //1
+            Console.WriteLine("Enter Ticket Id: ");
+            string ticket = Console.ReadLine();
+
+            if (!ticketNumbers.Contains(ticket))
+            {
+                Console.WriteLine("ticket invalid");
+                return;
+            }
+
+            if (cancelledTickets.Contains(ticket))
+            {
+                Console.WriteLine("Ticket is cancelled");
+                return;
+            }
+
+            //2 get passanger name by ticket index
+            int index = ticketNumbers.IndexOf(ticket);
+            string passanger = passengerNames[index];
+
+            //3 remove booking
+            if (bookingRecord.ContainsKey(ticket))
+            {
+                Console.WriteLine("removed booking: " + bookingRecord[ticket]);
+                bookingRecord.Remove(ticket);
+            }
+
+            cancelledTickets.Add(ticket);
+            Console.WriteLine("Ticket cancelled successfuly..");
+
+            //4 create a new queue and remove from the old queue
+            bool removeinqueue = false;
+            Queue<string> tqueue = new Queue<string>();
+            while(checkedInQueue.Count > 0)
+            {
+                string person = checkedInQueue.Dequeue();
+                if(person != passanger)
+                {
+                    tqueue.Enqueue(person);
+                }
+                else
+                {
+                    removeinqueue = true;
+                }
+                while (tqueue.Count > 0)
+                {
+                    checkedInQueue.Enqueue(tqueue.Dequeue());
+                }
+                if (removeinqueue)
+                {
+                    Console.WriteLine("Passenger removed from check-in queue.");
+                }
+            }
+
+
+            //5 Create temporary stacks
+            bool removedFromStack = false;
+
+            Stack<string> tempStack = new Stack<string>();
+            Stack<string> rebuildStack = new Stack<string>();
+
+            while (boardingStack.Count > 0)
+            {
+                string person = boardingStack.Pop();
+
+                if (person != passanger)
+                {
+                    tempStack.Push(person);
+                }
+                else
+                {
+                    removedFromStack = true;
+                }
+            }
+
+            while (tempStack.Count > 0)
+            {
+                rebuildStack.Push(tempStack.Pop());
+            }
+
+            while (rebuildStack.Count > 0)
+            {
+                boardingStack.Push(rebuildStack.Pop());
+            }
+
+            if (removedFromStack)
+            {
+                Console.WriteLine("Passenger removed from boarding stack.");
+            }
+
+            //7
+            Console.WriteLine("Cancellation Summary");
+
+            Console.WriteLine("Ticket ID: " + ticket);
+            Console.WriteLine("Passenger: " + passanger);
+            Console.WriteLine("Status: Cancelled");
+
+           // Console.WriteLine("Booking Removed: " + removedBooking);
+
+            if (removeinqueue)
+            {
+                Console.WriteLine("Removed from Check-In Queue: Yes");
+            }
+            else
+            {
+                Console.WriteLine("Removed from Check-In Queue: No");
+            }
+
+            if (removedFromStack)
+            {
+                Console.WriteLine("Removed from Boarding Stack: Yes");
+            }
+            else
+            {
+                Console.WriteLine("Removed from Boarding Stack: No");
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+        //helper functions
+        static void SupMenu()
+        {
+            Console.WriteLine("Updating");
+            Console.WriteLine("1.Change flight only");
+            Console.WriteLine("2.Change Date Only");
+            Console.WriteLine("3.Change Both");
+            Console.WriteLine("0.Cancel Update");
+
+        }
 
 
         static void PrintMenu()
         {
             Console.WriteLine("SKY WINGS FLIGHT MANAGEMENT SYSTEM");
-            Console.WriteLine("1.Register New Passenger");
-            Console.WriteLine("2.View All Passengers");
-            Console.WriteLine("3.Book a Flight Ticke");
-            Console.WriteLine("4.View Booking Details");
-            Console.WriteLine("5.Update a Booking");
-            Console.WriteLine("6.Cancel a Ticket");
+            Console.WriteLine("1.Register New Passenger");//done
+            Console.WriteLine("2.View All Passengers");//done
+            Console.WriteLine("3.Book a Flight Ticke");//done
+            Console.WriteLine("4.View Booking Details");//done
+            Console.WriteLine("5.Update a Booking");//done
+            Console.WriteLine("6.Cancel a Ticket");//on the way
             Console.WriteLine("7.Passenger Check-In");
             Console.WriteLine("8.Board Passengers (Boarding Stack)");
             Console.WriteLine("9.Generate Flight Manifest");
@@ -257,12 +610,15 @@ namespace MiniFlightManagementSystem
                         break;
 
                     case 4:
+                        viewBookingdetails();
                         break;
 
                     case 5:
+                        updateBooking();
                         break;
 
                     case 6:
+                        cancelTicket();
                         break;
 
                     case 7:
