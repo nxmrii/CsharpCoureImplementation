@@ -1,4 +1,5 @@
 ﻿using System.Xml.Linq;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MiniFlightManagementSystem
 {
@@ -137,10 +138,14 @@ namespace MiniFlightManagementSystem
             }
 
             // check cancell ticek
-            if (cancelledTickets.Contains(ticket))
+            /*if (cancelledTickets.Contains(ticket))
             {
                 Console.WriteLine("This ticket canselled cannot booked!!");
                 return;
+            }*/
+            if (cancelledTickets.Contains(ticket))
+            {
+                cancelledTickets.Remove(ticket);
             }
 
             // Check if the ticket is already in booking Record "dictionary"= containKeys
@@ -450,30 +455,36 @@ namespace MiniFlightManagementSystem
             string passanger = passengerNames[index];
 
             //3 remove booking
+            string removedBooking = "";
+
             if (bookingRecord.ContainsKey(ticket))
             {
-                Console.WriteLine("removed booking: " + bookingRecord[ticket]);
+                removedBooking = bookingRecord[ticket];
                 bookingRecord.Remove(ticket);
             }
 
-            cancelledTickets.Add(ticket);
+            //cancelledTickets.Add(ticket);
             Console.WriteLine("Ticket cancelled successfuly..");
 
-            //4 create a new queue and remove from the old queue
-            bool removeinqueue = false;
+            //5 create a new queue and remove from the old queue
+            bool removeinqueue = false;  //to know if the passanger is delete or not
             Queue<string> tqueue = new Queue<string>();
-            while(checkedInQueue.Count > 0)
+            while (checkedInQueue.Count > 0)
             {
-                string person = checkedInQueue.Dequeue();
-                if(person != passanger)
+                string person = checkedInQueue.Dequeue(); //remove first passanger from queue
+
+                //if the passsanger not the person who you want delete,add to temp queue 
+                if (person != passanger)
                 {
                     tqueue.Enqueue(person);
                 }
+                //if it is the passanger who you want delete dont add to temp queue just tell that is find
                 else
                 {
                     removeinqueue = true;
                 }
-                while (tqueue.Count > 0)
+            }
+            while (tqueue.Count > 0)
                 {
                     checkedInQueue.Enqueue(tqueue.Dequeue());
                 }
@@ -481,10 +492,11 @@ namespace MiniFlightManagementSystem
                 {
                     Console.WriteLine("Passenger removed from check-in queue.");
                 }
-            }
+            
 
 
-            //5 Create temporary stacks
+            //6 Create temporary stacks
+
             bool removedFromStack = false;
 
             Stack<string> tempStack = new Stack<string>();
@@ -526,7 +538,7 @@ namespace MiniFlightManagementSystem
             Console.WriteLine("Passenger: " + passanger);
             Console.WriteLine("Status: Cancelled");
 
-           // Console.WriteLine("Booking Removed: " + removedBooking);
+            Console.WriteLine("Booking Removed: " + removedBooking);
 
             if (removeinqueue)
             {
@@ -544,6 +556,109 @@ namespace MiniFlightManagementSystem
             else
             {
                 Console.WriteLine("Removed from Boarding Stack: No");
+                
+            }
+
+           
+           
+        }
+
+
+
+        //case 7 -- Passenger Check-In -- queue
+        static void chekIn() {
+            
+            shortMenu();
+            Console.Write("Choose an option: ");
+            string check = Console.ReadLine();
+
+            switch (check) {
+
+                //1.Check in a passenger
+                case "1":
+                    //2- prompt for ticket ID, validate it exists and is not cancelled,
+                    Console.WriteLine("Enter Ticket id: ");
+                    string ticket = Console.ReadLine();
+
+                    if (!ticketNumbers.Contains(ticket))
+                    {
+                        Console.WriteLine("Ticket ID not found.");
+                        return;
+                    }
+
+                    if (cancelledTickets.Contains(ticket))
+                    {
+                        Console.WriteLine("This ticket is cancelled");
+                        return;
+                    }
+
+                   // confirm a booking exists in bookingRecord,
+                    if (!bookingRecord.ContainsKey(ticket))
+                    {
+                        Console.WriteLine("this ticket id not exists");
+                        return;
+                    }
+                    
+                    int index = ticketNumbers.IndexOf(ticket);
+                    string passenger = passengerNames[index];
+
+                    // confirm the passenger is not already in the queue
+                    if (checkedInQueue.Contains(passenger))
+                    {
+                        Console.WriteLine("Passenger already in queue.");
+                        return;
+                    }
+                    //3- Count is less than 10: retrieve the passenger name and enqueue it to checkedInQueue.
+                    if (checkedInQueue.Count < 10)
+                    {
+                        checkedInQueue.Enqueue(passenger);
+                        Console.WriteLine("Passenger checked in successfully.");
+                    }
+                    //4-.Count equals 10: enqueue the passenger name to waitlistQueue i
+                    else
+                    {
+                        waitlistQueue.Enqueue(passenger);
+                        Console.WriteLine("Check-In Queue Full.\r\nAdded to Waitlist Queue.");
+                    }
+                        break;
+
+                //2.View check-in queue
+                //display all passengers currently in checkedInQueue using foreach with position labels,
+                //and display the waitlist count
+                case "2":
+                    int pos = 1;
+                    foreach(string p in checkedInQueue)
+                    {
+                        Console.WriteLine(pos + ". " + p);
+                        pos++;
+                    }
+                    Console.WriteLine("WaitList count: " + waitlistQueue.Count);
+                break;
+
+                //3.Process next passenger
+                //if the queue is not empty, dequeue the front passenger and display their name as processed.
+                //If the waitlist is not empty, automatically move the front waitlist passenger into checkedInQueue.
+                case "3":
+                    if(checkedInQueue.Count == 0)
+                    {
+                        Console.WriteLine("Queue is empty");
+                        return;
+                    }
+                    string frontPassanger = checkedInQueue.Dequeue();
+                    Console.WriteLine("Processed: " + frontPassanger);
+
+                    if(waitlistQueue.Count > 0)
+                    {
+                        string nextPassenger = waitlistQueue.Dequeue();
+                        checkedInQueue.Enqueue(nextPassenger);
+                        Console.WriteLine(nextPassenger + "Moved from wait List to check in queue..");
+                    }
+                break;
+
+                //0.Back
+                case "0":
+                Console.WriteLine("back.");
+                break;
             }
         }
 
@@ -553,12 +668,9 @@ namespace MiniFlightManagementSystem
 
 
 
-
-
-
-
-        //helper functions
-        static void SupMenu()
+//helper functions 
+//for case 5
+static void SupMenu()
         {
             Console.WriteLine("Updating");
             Console.WriteLine("1.Change flight only");
@@ -566,6 +678,16 @@ namespace MiniFlightManagementSystem
             Console.WriteLine("3.Change Both");
             Console.WriteLine("0.Cancel Update");
 
+        }
+
+        //for case 7
+        static void shortMenu()
+        {
+            Console.WriteLine("Passenger Check-In");
+            Console.WriteLine("1.Check in a passenger");
+            Console.WriteLine("2.View check-in queue");
+            Console.WriteLine("3.Process next passenger");
+            Console.WriteLine("0.Back");
         }
 
 
@@ -577,8 +699,8 @@ namespace MiniFlightManagementSystem
             Console.WriteLine("3.Book a Flight Ticke");//done
             Console.WriteLine("4.View Booking Details");//done
             Console.WriteLine("5.Update a Booking");//done
-            Console.WriteLine("6.Cancel a Ticket");//on the way
-            Console.WriteLine("7.Passenger Check-In");
+            Console.WriteLine("6.Cancel a Ticket");//done
+            Console.WriteLine("7.Passenger Check-In");// in the way
             Console.WriteLine("8.Board Passengers (Boarding Stack)");
             Console.WriteLine("9.Generate Flight Manifest");
             Console.WriteLine("10.Manage Waitlist & Seat Assignment");
