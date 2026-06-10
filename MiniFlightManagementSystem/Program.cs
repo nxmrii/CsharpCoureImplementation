@@ -1,10 +1,16 @@
 ﻿using System.Xml.Linq;
 using static System.Net.Mime.MediaTypeNames;
+using System.IO;
+
+
+
 
 namespace MiniFlightManagementSystem
 {
     internal class Program
     {
+
+        
         // variables
         //List
         static List<string> passengerNames = new List<string>();
@@ -69,10 +75,17 @@ namespace MiniFlightManagementSystem
             passengerNames.Add(name);
             ticketNumbers.Add(Tid);
 
+           
+
             //5- view 
             Console.WriteLine("Passanger successfuly registerd..");
             Console.WriteLine("Name: " + name);
             Console.WriteLine("Ticket Id: " + Tid);
+
+
+            //call append method to save the registration data:
+            AppendToFile(registerFile,$"Passenger: {name}, Ticket: {Tid}");
+            Console.WriteLine(ReadFromFile(registerFile));
 
         }
 
@@ -214,6 +227,11 @@ namespace MiniFlightManagementSystem
             Console.WriteLine("ticket: " + ticket);
             Console.WriteLine("flight: " + selectflight);
             Console.WriteLine("date: " + selectDate);
+
+            AppendToFile(bookingFile,
+                $"Ticket:{ticket}, " +
+                $"Passenger:{passengerNames[ticketindex]}, " +
+                $"Flight:{selectflight}, Date:{selectDate}");
         }
 
 
@@ -559,8 +577,12 @@ namespace MiniFlightManagementSystem
                 
             }
 
-           
-           
+            //call append function to save the ticket which is canceled
+            AppendToFile(cancelFile,
+                $"Ticket:{ticket}, " +
+                $"Passenger:{passanger} CANCELLED");
+
+
         }
 
 
@@ -620,7 +642,11 @@ namespace MiniFlightManagementSystem
                         waitlistQueue.Enqueue(passenger);
                         Console.WriteLine("Check-In Queue Full.\r\nAdded to Waitlist Queue.");
                     }
-                        break;
+
+                    //save the passenger who checked in
+                    AppendToFile(checkInFile,
+                        $"{passenger} checked in");
+                    break;
 
                 //2.View check-in queue
                 //display all passengers currently in checkedInQueue using foreach with position labels,
@@ -702,12 +728,17 @@ namespace MiniFlightManagementSystem
                         break;
                     }
                     string passengers = boardingStack.Pop();
-
                     string seat = currentRow.ToString() + currentSeat;
+
                     //Store the assignment in passengerSeatMap.
                     //passengerSeatMap.Add(passengers, seat);
                     // Display the passenger name and assigned seat.
                     Console.WriteLine($"{passengers} boarded. Seat: {seat}");
+
+                    //save the boarding
+                    AppendToFile(boardingFile,
+                        $"{passengers} boarded -> {seat}");
+
 
                     //to go next seat
                     if (currentSeat < 'F')
@@ -738,6 +769,8 @@ namespace MiniFlightManagementSystem
                     break;
 
                 case "4":
+                    //show all bookings
+                    Console.WriteLine(ReadFromFile("BoardingLog.txt"));
                     //iterate over passengerSeatMap and display each passenger name with their assigned seat
                     if (passengerNames.Count == 0)
                     {
@@ -816,6 +849,9 @@ namespace MiniFlightManagementSystem
 
         static void Main(string[] args)
         {
+
+            //Call it in Main before the menu
+            LoadPassengers();
             bool exit = false;
 
             while (!exit)
@@ -880,5 +916,70 @@ namespace MiniFlightManagementSystem
             }
 
         }
+
+        //---------------------------------------------------------------
+
+
+        //helper method for file
+        static string registerFile = "RegisteredPassengers.txt";
+        static string bookingFile = "Bookings.txt";
+        static string cancelFile = "CancelledTickets.txt";
+        static string checkInFile = "CheckInLog.txt";
+        static string boardingFile = "BoardingLog.txt";
+        
+
+        //for append
+        static void AppendToFile(string fileName, string text)
+        {
+            using (StreamWriter writer = new StreamWriter(fileName, true))
+            {
+                writer.WriteLine(text);
+            }
+        }
+
+        //for read
+        static string ReadFromFile(string fileName)
+        {
+            if (!File.Exists(fileName))
+            {
+                return "File is empty or does not exist.";
+            }
+
+            using (StreamReader reader = new StreamReader(fileName))
+            {
+                return reader.ReadToEnd();
+            }
+        }
+
+
+        static void LoadPassengers()
+        {
+            if (!File.Exists(registerFile))
+                return;
+
+            using (StreamReader reader = new StreamReader(registerFile))
+            {
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+                    if (string.IsNullOrWhiteSpace(line))
+                        continue;
+
+                    string[] parts = line.Split(',');
+
+                    if (parts.Length < 2)
+                        continue;
+
+                    string name = parts[0].Replace("Passenger: ", "").Trim();
+                    string ticket = parts[1].Replace("Ticket: ", "").Trim();
+
+                    passengerNames.Add(name);
+                    ticketNumbers.Add(ticket);
+                }
+            }
+        }
+
+
+
     }
 }
