@@ -663,14 +663,111 @@ namespace MiniFlightManagementSystem
         }
 
 
+        //cas 8 --  Board Passengers (Boarding Stack)
+        static int currentRow = 10;
+        static char currentSeat = 'A';
+        static void BoardPassengers()
+        {
+            boardMenu();
+            Console.Write("Choose an option: ");
+            string ckick = Console.ReadLine();
+
+            switch (ckick)
+            {
+
+                //Load Boarding Stack = Queue-> stack
+                case "1":
+                    if (boardingStack.Count > 0 && checkedInQueue.Count == 0)
+                    {
+                        Console.WriteLine("Already loaded");
+                        break;
+                    }
+                    int count = 0;
+                    while (checkedInQueue.Count > 0)
+                    {
+                        string passenger = checkedInQueue.Dequeue();
+                        boardingStack.Push(passenger);
+                        count++;
+                    }
+                    Console.WriteLine($"{count} passengers loaded.");
+                    break;
+
+
+                //Board next passenger
+                case "2":
+                    // if boardingStack is not empty, pop the top passenger.
+                    if(boardingStack.Count == 0)
+                    {
+                        Console.WriteLine("No passengers in boarding stack");
+                        break;
+                    }
+                    string passengers = boardingStack.Pop();
+
+                    string seat = currentRow.ToString() + currentSeat;
+                    //Store the assignment in passengerSeatMap.
+                    //passengerSeatMap.Add(passengers, seat);
+                    // Display the passenger name and assigned seat.
+                    Console.WriteLine($"{passengers} boarded. Seat: {seat}");
+
+                    //to go next seat
+                    if (currentSeat < 'F')
+                    {
+                        currentSeat++; //A > B > C ...
+                    }
+                    else
+                    {
+                        currentSeat = 'A';
+                        currentRow++;
+                    }
+                    break;
+
+                case "3":
+                    if(boardingStack.Count == 0)
+                    {
+                        Console.WriteLine("boarding stack is empty");
+                        break;
+                    }
+
+                    //display the stack
+                    int postion = 1;
+                    foreach (string passengr in boardingStack)
+                    {
+                        Console.WriteLine(postion  + ". " + passengr);
+                        postion++;
+                    }
+                    break;
+
+                case "4":
+                    //iterate over passengerSeatMap and display each passenger name with their assigned seat
+                    if (passengerNames.Count == 0)
+                    {
+                        Console.WriteLine("no borading record..");
+                        break;
+                    }
+                    foreach (var passenger in passengerSeatMap)
+                    {
+                        Console.WriteLine($"{passenger.Key} , { passenger.Value}");
+                    }
+                    
+                    break;
+
+                //0.Back
+                case "0":
+                    Console.WriteLine("back.");
+                    break;
+            }
+        }
 
 
 
 
 
-//helper functions 
-//for case 5
-static void SupMenu()
+
+
+        //--------------------------------------------------------------
+        //helper functions 
+        //for case 5
+        static void SupMenu()
         {
             Console.WriteLine("Updating");
             Console.WriteLine("1.Change flight only");
@@ -690,7 +787,6 @@ static void SupMenu()
             Console.WriteLine("0.Back");
         }
 
-
         static void PrintMenu()
         {
             Console.WriteLine("SKY WINGS FLIGHT MANAGEMENT SYSTEM");
@@ -700,11 +796,22 @@ static void SupMenu()
             Console.WriteLine("4.View Booking Details");//done
             Console.WriteLine("5.Update a Booking");//done
             Console.WriteLine("6.Cancel a Ticket");//done
-            Console.WriteLine("7.Passenger Check-In");// in the way
-            Console.WriteLine("8.Board Passengers (Boarding Stack)");
+            Console.WriteLine("7.Passenger Check-In");//done
+            Console.WriteLine("8.Board Passengers (Boarding Stack)");//in the way
             Console.WriteLine("9.Generate Flight Manifest");
             Console.WriteLine("10.Manage Waitlist & Seat Assignment");
             Console.WriteLine("0.Exi");
+        }
+
+        static void boardMenu()
+        {
+            Console.WriteLine("Boarding Menu");
+            Console.WriteLine("1.Load boarding stack from check-in queue");
+            Console.WriteLine("2.Board next passenger");
+            Console.WriteLine("3.View boarding stack");
+            Console.WriteLine("4.View boarding log");
+            Console.WriteLine("0.Back");
+
         }
 
         static void Main(string[] args)
@@ -744,9 +851,11 @@ static void SupMenu()
                         break;
 
                     case 7:
+                        chekIn();
                         break;
 
                     case 8:
+                        BoardPassengers();
                         break;
 
                     case 9:
